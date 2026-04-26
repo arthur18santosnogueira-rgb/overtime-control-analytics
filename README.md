@@ -28,3 +28,7 @@ O projeto será desenvolvido utilizando Scrum, com sprints quinzenais e acompanh
 
 ## 🔗 Repositório
 Este repositório contém toda a documentação e desenvolvimento do projeto.
+
+## 🧱 Arquitetura
+
+O sistema utiliza o modelo C4 para representação da arquitetura, contemplando os níveis de contexto e containers.
