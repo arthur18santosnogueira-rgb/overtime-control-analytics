@@ -1,0 +1,170 @@
+import { useEffect, useState } from 'react'
+
+function App() {
+  const [dashboard, setDashboard] = useState({
+    totalHorasExtras: 0,
+    totalRegistros: 0
+  })
+
+  const [colaborador, setColaborador] = useState({
+    nome: '',
+    setor: ''
+  })
+
+  const [registro, setRegistro] = useState({
+    colaborador: '',
+    horasExtras: ''
+  })
+
+  // Buscar dados do dashboard
+  useEffect(() => {
+    carregarDashboard()
+  }, [])
+
+  const carregarDashboard = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/dashboard')
+      const data = await response.json()
+
+      setDashboard(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  // Cadastro de colaborador
+  const cadastrarColaborador = async () => {
+    await fetch('http://localhost:3001/colaboradores', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(colaborador)
+    })
+
+    alert('Colaborador cadastrado!')
+
+    setColaborador({
+      nome: '',
+      setor: ''
+    })
+  }
+
+  // Registro de horas
+  const registrarHoras = async () => {
+    await fetch('http://localhost:3001/horas', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(registro)
+    })
+
+    alert('Horas registradas!')
+
+    setRegistro({
+      colaborador: '',
+      horasExtras: ''
+    })
+
+    carregarDashboard()
+  }
+
+  return (
+    <div style={{ padding: 30, fontFamily: 'Arial' }}>
+      <h1>Overtime Control Analytics</h1>
+
+      <hr />
+
+      <h2>Dashboard</h2>
+
+      <p>
+        <strong>Total de Horas Extras:</strong>{' '}
+        {dashboard.totalHorasExtras}
+      </p>
+
+      <p>
+        <strong>Total de Registros:</strong>{' '}
+        {dashboard.totalRegistros}
+      </p>
+
+      <hr />
+
+      <h2>Cadastro de Colaborador</h2>
+
+      <input
+        type="text"
+        placeholder="Nome"
+        value={colaborador.nome}
+        onChange={(e) =>
+          setColaborador({
+            ...colaborador,
+            nome: e.target.value
+          })
+        }
+      />
+
+      <br />
+      <br />
+
+      <input
+        type="text"
+        placeholder="Setor"
+        value={colaborador.setor}
+        onChange={(e) =>
+          setColaborador({
+            ...colaborador,
+            setor: e.target.value
+          })
+        }
+      />
+
+      <br />
+      <br />
+
+      <button onClick={cadastrarColaborador}>
+        Cadastrar
+      </button>
+
+      <hr />
+
+      <h2>Registro de Horas Extras</h2>
+
+      <input
+        type="text"
+        placeholder="Colaborador"
+        value={registro.colaborador}
+        onChange={(e) =>
+          setRegistro({
+            ...registro,
+            colaborador: e.target.value
+          })
+        }
+      />
+
+      <br />
+      <br />
+
+      <input
+        type="number"
+        placeholder="Horas Extras"
+        value={registro.horasExtras}
+        onChange={(e) =>
+          setRegistro({
+            ...registro,
+            horasExtras: e.target.value
+          })
+        }
+      />
+
+      <br />
+      <br />
+
+      <button onClick={registrarHoras}>
+        Registrar Horas
+      </button>
+    </div>
+  )
+}
+
+export default App
