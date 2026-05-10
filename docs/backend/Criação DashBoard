@@ -1,0 +1,24 @@
+import { useEffect, useState } from 'react'
+
+function App() {
+  const [dados, setDados] = useState({})
+
+  useEffect(() => {
+    fetch('http://localhost:3001/dashboard')
+      .then(res => res.json())
+      .then(data => setDados(data))
+  }, [])
+
+  return (
+    <div style={{ padding: 20 }}>
+      <h1>Overtime Control Analytics</h1>
+
+      <h2>Dashboard</h2>
+
+      <p>Total de Horas Extras: {dados.totalHorasExtras}</p>
+      <p>Total de Registros: {dados.totalRegistros}</p>
+    </div>
+  )
+}
+
+export default App
