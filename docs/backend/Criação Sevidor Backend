@@ -1,0 +1,39 @@
+const express = require('express')
+const cors = require('cors')
+
+const app = express()
+
+app.use(cors())
+app.use(express.json())
+
+let colaboradores = []
+let registros = []
+
+app.get('/', (req, res) => {
+  res.send('API funcionando')
+})
+
+app.post('/colaboradores', (req, res) => {
+  colaboradores.push(req.body)
+  res.json({ mensagem: 'Colaborador cadastrado' })
+})
+
+app.post('/horas', (req, res) => {
+  registros.push(req.body)
+  res.json({ mensagem: 'Horas registradas' })
+})
+
+app.get('/dashboard', (req, res) => {
+  const totalHorasExtras = registros.reduce((acc, item) => {
+    return acc + Number(item.horasExtras || 0)
+  }, 0)
+
+  res.json({
+    totalHorasExtras,
+    totalRegistros: registros.length
+  })
+})
+
+app.listen(3001, () => {
+  console.log('Servidor rodando na porta 3001')
+})
